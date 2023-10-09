@@ -2,11 +2,11 @@ package Forms;
 
 import Lines.Line;
 import utilities.MyPoint;
-import Forms.Shape;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class Polygon {
@@ -15,7 +15,7 @@ public class Polygon {
     private final Line line;
     private Color c;
     private final BufferedImage bufferedImage;
-    private Graphics g;
+    private final Graphics g;
 
     public Polygon(BufferedImage bufferedImage, Graphics g) {
         c = Color.RED;
@@ -33,9 +33,7 @@ public class Polygon {
 
     public void setVerts(MyPoint[] verts) {
         this.vertices.clear();
-        for (int i = 0; i < verts.length; i++) {
-            vertices.add(verts[i]);
-        }
+        Collections.addAll(vertices, verts);
     }
 
     public void addVert(MyPoint p) {
@@ -71,15 +69,57 @@ public class Polygon {
 //        setVerts(verts);
 //    }
 
-//    public void scale(double sx, double sy) {
-//        MyPoint[] verts = getVerts();
-//        for (MyPoint vert : verts) {
-//            vert.x = (int) (vert.x * sx);
-//            vert.y = (int) (vert.y * sy);
+    public void scale(double sx, double sy) {
+        MyPoint origin = vertices.get(0);
+        MyPoint[] verts = getVerts();
+        int i = 0;
+        double scaleFactor = 0;
+
+        if (sx != 1 || sy != 1){
+            scaleFactor = sx - 1;
+        }
+        for (MyPoint vert : verts) {
+            if (i != 0){
+                vert.setX((int) (vert.getX()* sx) - (int)(origin.getX() * scaleFactor));
+                vert.setY((int) (vert.getY() * sy) - (int)(origin.getY() * scaleFactor));
+            }
+          i++;
+        }
+//        for (MyPoint point:verts) {
+//            System.out.println("x = "+point.getX()+", y = "+point.getY());
 //        }
-//        setVerts(verts);
-//    }
-//
+        setVerts(verts);
+    }
+
+    public void scaleWithMatrix(double sx, double sy){
+        double [][]matrixOfScale= {
+                {sx, 0, 0},
+                {0, sy, 0},
+                {0, 0, 1}
+        };
+        MyPoint[]vertex = getVerts();
+        for (int i = 0; i < vertex.length; i++) {
+            double[] currentPoint = {
+                    vertex[i].getX(),
+                    vertex[i].getY(),
+                    1
+            };
+            for (int j = 3; j <= 9 ; j+=3) {
+                int k= 0;
+                int l= 1;
+                int m = 2;
+                if (j == 3){
+                    int result = (int) (currentPoint[k] * matrixOfScale[k][k]);
+                    vertex[i].setX(result);
+                }else if(j == 6){
+                    int result = (int) (currentPoint[l] * matrixOfScale[l][l]);
+                    vertex[i].setY(result);
+                }
+            }
+        }
+        setVerts(vertex);
+    }
+
      private MyPoint getMidPoint(MyPoint[] points) {
          int totalX = 0;
          int totalY = 0;
@@ -104,31 +144,24 @@ public class Polygon {
 
         double sin = Math.sin(radians);
         double cos = Math.cos(radians);
-//        double [][] rotationMatrix = {
-//                {cos, -sin, 0},
-//                {sin , cos, 0},
-//                {0, 0, 1}
-//        };
 
         for (int i = 0; i < vertex.length; i++) {
             rotatedVertices[i] = new MyPoint(
                     vertex[i].getX() - pivot.getX(),
-                    vertex[i].getX() - pivot.getY()
+                    vertex[i].getY() - pivot.getY()
             );
         }
 
-        for (int i = 0; i < rotatedVertices.length; i++) {
-            double x = rotatedVertices[i].getX();
-            double y = rotatedVertices[i].getY();
-            rotatedVertices[i].setX((int) (x * cos - y * sin));
-            rotatedVertices[i].setY((int) (x * sin + y * cos));
+        for (MyPoint myPoint : rotatedVertices) {
+            double x = myPoint.getX();
+            double y = myPoint.getY();
+            myPoint.setX((int) (x * cos - y * sin));
+            myPoint.setY((int) (x * sin + y * cos));
         }
 
-        for (int i = 0; i < rotatedVertices.length; i++) {
-//            rotatedVertices[i].x += pivot.x;
-//            rotatedVertices[i].y += pivot.y;
-            rotatedVertices[i].setX(pivot.getX() + rotatedVertices[i].getX());
-            rotatedVertices[i].setY(pivot.getY() + rotatedVertices[i].getY());
+        for (MyPoint rotatedVertex : rotatedVertices) {
+            rotatedVertex.setX(pivot.getX() + rotatedVertex.getX());
+            rotatedVertex.setY(pivot.getY() + rotatedVertex.getY());
         }
 
         setVerts(rotatedVertices);
@@ -181,16 +214,7 @@ public class Polygon {
                 }
             }
         }
-//        for (MyPoint point:rotatedVertices) {
-//            System.out.println("x = "+point.getX()+", y = "+point.getY());
-//        }
         setVerts(rotatedVertices);
-
     }
-
-//    public void setGraphics(Graphics g){
-//        this.g =g;
-//    }
-
 }
 

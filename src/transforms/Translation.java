@@ -12,7 +12,7 @@ public class Translation extends JPanel implements Runnable{
     private int y0 = 0;
     private int rectWidth = 100;
     private int rectHeight = 50;
-    private OutlineShape shape;
+    private final OutlineShape shape;
     private BufferedImage bufferedImage;
     private final int incrementX = 4;
     private final int incrementY = 4;
@@ -63,6 +63,7 @@ public class Translation extends JPanel implements Runnable{
                 translatedBottomRight[j] += translationMatrix[j][k] * bottomRight[k];
             }
         }
+
 
         x0 = translatedTopLeft[0];
         y0 = translatedTopLeft[1];

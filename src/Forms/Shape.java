@@ -14,10 +14,11 @@ public class Shape {
     private final int centerY;
     private final Color color;
     private final Figure figure;
+    private int radius;
     public Shape(ArrayList<MyPoint> arrayList, int centerX, int centerY, BufferedImage bufferedImage, Graphics g, Color color,
                  Figure figure){
         this.arrayList = arrayList;
-        this.figure =figure;
+        this.figure = figure;
         this.bufferedImage = bufferedImage;
         graphics = g;
         this.centerX = centerX;
@@ -54,5 +55,11 @@ public class Shape {
 
     public Figure getFigure(){
         return figure;
+    }
+
+    public void setRadius(int radius){
+        if (!figure.equals(Figure.RECTANGLE)){
+            this.radius = radius;
+        }
     }
 }

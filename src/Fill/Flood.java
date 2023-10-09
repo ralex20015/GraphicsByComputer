@@ -21,7 +21,6 @@ public class Flood {
             int height = img.getHeight();
 
             int startColor = getRGB(x, y,img);
-//            System.out.println(startColor);
             if (startColor == fillColor.getRGB()) {
                 return;
             }
