@@ -6,7 +6,9 @@ import java.awt.image.BufferedImage;
 public interface IPixel {
 
     default void putPixel(int x, int y, BufferedImage bufferedImage, Color c) {
-        bufferedImage.setRGB(x, y, c.getRGB());
+        if ((x < bufferedImage.getWidth() && x > -1) && (y < bufferedImage.getHeight() && y > -1)) {
+            bufferedImage.setRGB(x, y, c.getRGB());
+        }
     }
 
     default void changeColor(Color color){

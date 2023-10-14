@@ -114,10 +114,4 @@ public class Line implements IPixel {
         }
     }
 
-    @Override
-    public void putPixel(int x, int y, BufferedImage bufferedImage, Color c) {
-        if ((x < bufferedImage.getWidth() && x > -1) && (y < bufferedImage.getHeight() && y > -1)) {
-            IPixel.super.putPixel(x, y, bufferedImage, c);
-        }
-    }
 }

@@ -1,14 +1,16 @@
-package Lines;
+package Fill;
+
+import Lines.MyCanva;
 
 import javax.swing.*;
 
-public class Prueba extends JFrame {
+public class FillProgram extends JFrame {
 
     public static void main(String[] args) {
-        new Prueba();
+        new FillProgram();
     }
 
-    public Prueba(){
+    public FillProgram(){
         setSize(500,500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

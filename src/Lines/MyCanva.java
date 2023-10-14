@@ -24,15 +24,15 @@ public class MyCanva extends JPanel {
         OutlineShape shape = new OutlineShape();
 //        shape.drawMidPointCircle(200,200,100,bufferedImage,g);
 
-//        ScanLine.apply(shape.drawBasicCircle(300,300,100,bufferedImage,g));
-//        ScanLine.apply(shape.drawRectangle(100,100,200,100,bufferedImage,g));
+        ScanLine.apply(shape.drawBasicCircle(300,300,100,bufferedImage,g));
+        ScanLine.apply(shape.drawRectangle(100,100,200,100,bufferedImage,g));
         shape.changeColor(Color.GREEN);
 //        ScanLine.apply(shape.drawMidPointCircle(300,300,100,bufferedImage,g));
 //        ScanLine.apply(shape.drawEllipse(300,300,100,50,bufferedImage,g));
 //        Flood.apply(shape.drawRectangle(100,100,200,100,bufferedImage,g));
 //        shape.drawMidPointCircle(300,300,100,bufferedImage,g);
 //        shape.changeColor(Color.BLACK);
-        ScanLine.apply(shape.drawCircleWithPolarCoordinates(300,300,100,bufferedImage,g));
+//        ScanLine.apply(shape.drawCircleWithPolarCoordinates(300,300,100,bufferedImage,g));
 
 //        Flood.apply(shape.drawEllipse(300,300,100,50,bufferedImage,g));
 //        ScanLine.apply(shape.drawCircleWithPolarCoordinates(200,200,100,bufferedImage,g));

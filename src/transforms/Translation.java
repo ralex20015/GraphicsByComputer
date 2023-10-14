@@ -1,30 +1,20 @@
 package transforms;
 
 import Fill.Flood;
-import Forms.OutlineShape;
+import Forms.Polygon;
+import utilities.MyPoint;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Translation extends JPanel implements Runnable{
-    private int x0 = 0;
-    private int y0 = 0;
-    private int rectWidth = 100;
-    private int rectHeight = 50;
-    private final OutlineShape shape;
     private BufferedImage bufferedImage;
     private final int incrementX = 4;
     private final int incrementY = 4;
     private int dx = incrementX;
     private int dy = incrementY;
-    private Thread drawer;
-
-    private int[][] translationMatrix = {
-            {1, 0, dx},
-            {0, 1, dy},
-            {0, 0, 1}
-    };
+    private final Thread drawer;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -38,37 +28,23 @@ public class Translation extends JPanel implements Runnable{
     }
     public Translation(){
         bufferedImage = new BufferedImage(600,600,BufferedImage.TYPE_INT_ARGB);
-        shape = new OutlineShape();
         drawer = new Thread(this);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int[] topLeft = {x0, y0, 1};
-        int[] topRight = {x0 + rectWidth, y0, 1};
-        int[] bottomLeft = {x0, y0 + rectHeight, 1};
-        int[] bottomRight = {x0 + rectWidth, y0 + rectHeight, 1};
-
-        int[] translatedTopLeft = new int[3];
-        int[] translatedTopRight = new int[3];
-        int[] translatedBottomLeft = new int[3];
-        int[] translatedBottomRight = new int[3];
-
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-                translatedTopLeft[j] += translationMatrix[j][k] * topLeft[k];
-                translatedTopRight[j] += translationMatrix[j][k] * topRight[k];
-                translatedBottomLeft[j] += translationMatrix[j][k] * bottomLeft[k];
-                translatedBottomRight[j] += translationMatrix[j][k] * bottomRight[k];
-            }
-        }
-
-
-        x0 = translatedTopLeft[0];
-        y0 = translatedTopLeft[1];
-
-        Flood.apply(shape.drawRectangle(x0, y0,rectWidth,rectHeight,bufferedImage,g));
+        Polygon polygon = new Polygon(bufferedImage);
+        int y0 = 0;
+        int x0 = 0;
+        polygon.addVert(new MyPoint(x0, y0));
+        int rectWidth = 100;
+        polygon.addVert(new MyPoint(x0 + rectWidth, y0));
+        int rectHeight = 50;
+        polygon.addVert(new MyPoint(x0 + rectWidth, y0 + rectHeight));
+        polygon.addVert(new MyPoint(x0, y0 + rectHeight));
+        Transform.translate(polygon, dx, dy);
+        Flood.apply(polygon.drawPolygon());
         reset(g);
     }
 

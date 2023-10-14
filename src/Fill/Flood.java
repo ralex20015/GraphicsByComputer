@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 public class Flood {
+    private static  Color c;
     public static void apply(Shape shape){
         floodFill(shape.getXCenter(),shape.getYCenter(),shape);
     }
@@ -43,7 +44,9 @@ public class Flood {
                 }
             }
         }
-
+    }
+    public static void setColor(Color color){
+        c = color;
     }
 
     private static int getRGB(int x, int y, BufferedImage bufferedImage) {

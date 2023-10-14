@@ -269,14 +269,6 @@ public class OutlineShape implements IPixel {
         }
         return new Shape(arrayList, xc, yc, bufferedImage, g, c, Shape.Figure.BASIC_CIRCLE);
     }
-
-    @Override
-    public void putPixel(int x, int y, BufferedImage bufferedImage, Color c) {
-        if ((x < bufferedImage.getWidth() && x > -1) && (y < bufferedImage.getHeight() && y > -1)) {
-            IPixel.super.putPixel(x, y, bufferedImage, c);
-        }
-    }
-
     @Override
     public void changeColor(Color color) {
         if (color != null) {
