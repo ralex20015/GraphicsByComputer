@@ -1,13 +1,16 @@
 package Forms;
 
-import Fill.Flood;
+import Curve.Curve;
 import Lines.Line;
+import transforms.Transform;
 import utilities.MyPoint;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 
 public class Polygon {
@@ -60,15 +63,6 @@ public class Polygon {
         return new Shape(vertices,center.getX(),center.getY(), bufferedImage, bufferedImage.getGraphics(),c, Shape.Figure.RECTANGLE);
     }
 
-//    public void translate(Point dif) {
-//        Point[] verts = getVerts();
-//        for (Point vert : verts) {
-//            vert.x = vert.x + dif.x;
-//            vert.y = vert.y + dif.y;
-//        }
-//        setVerts(verts);
-//    }
-
     public void scale(double sx, double sy) {
         MyPoint origin = vertices.get(0);
         MyPoint[] verts = getVerts();
@@ -102,5 +96,60 @@ public class Polygon {
 
          return new MyPoint(midX, midY);
      }
+
+    public MyPoint[] getPointsOfArc(int centerX, int centerY, int radiusX, int radiusY, double startAngle, double arcAngle) {
+        Graphics graphics = bufferedImage.getGraphics();
+        graphics.setColor(c);
+
+        int x, y;
+        int totalPoints =100; // Cantidad de puntos a lo largo del arco
+
+        double angle = startAngle;
+        double angleIncrement = arcAngle / totalPoints;
+
+        MyPoint[] head = new MyPoint[100];
+        for (int i = 0; i < totalPoints; i++) {
+            x = centerX + (int) (radiusX * Math.cos(Math.toRadians(angle)));
+            y = centerY + (int) (radiusY * Math.sin(Math.toRadians(angle)));
+            head[i] = new MyPoint(x, y);
+            angle += angleIncrement;
+        }
+
+//        Curve curve = new Curve(bufferedImage);
+//        MyPoint[] pointsHand = curve.getPointsOfCurve(100,new MyPoint(25,125),10,20);
+//        Polygon polygon = new Polygon(bufferedImage);
+//        polygon.setVerts(pointsHand);
+//        pointsHand = Transform.rotate(polygon,270);
+//        MyPoint[]kirbyPoints =  Stream.concat(
+//                Arrays.stream(head).limit(98),
+//                Arrays.stream(pointsHand))
+//                .toArray(MyPoint[]::new);
+//        System.out.println(pointsHand[pointsHand.length-1]);
+//        System.out.println(pointsHand[0]);
+
+//        double starAngle = 0;
+//
+//        MyPoint[]head2 = new MyPoint[totalPoints];
+//        for (int i = 0; i < totalPoints; i++) {
+//            x = centerX + (int) (radiusX * Math.cos(Math.toRadians(starAngle)));
+//            y = centerY + (int) (radiusY * -Math.sin(Math.toRadians(starAngle)));
+//            head2[i] = new MyPoint(x, y);
+//            startAngle += angleIncrement;
+//        }
+//
+//        kirbyPoints =  Stream.concat(
+//                        Arrays.stream(kirbyPoints),
+//                        Arrays.stream(head2))
+//                .toArray(MyPoint[]::new);
+//        for (int i = 1; i < kirbyPoints.length; i++) {
+//            line.drawDDALine(kirbyPoints[i], kirbyPoints[i - 1], bufferedImage, graphics);
+//        }
+//        System.out.println(kirbyPoints[0]+" "+kirbyPoints[kirbyPoints.length-1]);
+////        line.drawDDALine(kirbyPoints[0], kirbyPoints[totalPoints - 1], bufferedImage, graphics);
+//
+//        MyPoint center2 = getMidPoint(kirbyPoints);
+
+        return head;
+    }
 }
 

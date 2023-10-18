@@ -28,8 +28,8 @@ public class Smoke extends JPanel {
         super.paintComponent(g);
         g.drawImage(bufferedImage,0,0,null);
         Curve curve = new Curve(bufferedImage);
-        curve.drawSmoke(new MyPoint(275, 275), new Dimension(250, 250), Color.BLACK);
-        curve.drawInfinite(100, new MyPoint(300, 400));
-//        curve.drawParticleMovement(300);
+//        curve.drawSmoke(new MyPoint(275, 275), new Dimension(250, 250), Color.BLACK);
+//        curve.drawInfinite(100, new MyPoint(300, 400));
+        curve.drawParticleMovement(300);
     }
 }

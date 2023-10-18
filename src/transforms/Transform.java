@@ -50,7 +50,7 @@ public class Transform {
         polygon.setVerts(translatedVertex);
     }
 
-    public static void rotate(Polygon polygon, double angle){
+    public static MyPoint[] rotate(Polygon polygon, double angle){
         MyPoint[] vertex = polygon.getVerts();
         MyPoint[] rotatedVertices = new MyPoint[vertex.length];
 
@@ -99,9 +99,11 @@ public class Transform {
             }
         }
         polygon.setVerts(rotatedVertices);
+        return rotatedVertices;
     }
 
-    public void rotateInBaseOfPivot(Polygon polygon, double angle, MyPoint pivot) {
+
+    public static void rotateInBaseOfPivot(Polygon polygon, double angle, MyPoint pivot) {
         MyPoint[] vertex = polygon.getVerts();
         MyPoint[] rotatedVertices = new MyPoint[vertex.length];
 

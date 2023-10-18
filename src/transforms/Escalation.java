@@ -24,13 +24,11 @@ public class Escalation extends JPanel implements Runnable {
         escalation.startThread();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
     }
 
     public Escalation(){
         bufferedImage = new BufferedImage(600,600,BufferedImage.TYPE_INT_ARGB);
         anim = new Thread(this);
-
     }
 
     @Override

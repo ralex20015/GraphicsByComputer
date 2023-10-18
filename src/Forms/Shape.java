@@ -10,8 +10,8 @@ public class Shape {
     private final ArrayList<MyPoint>arrayList;
     private final BufferedImage bufferedImage;
     private final Graphics graphics;
-    private final int centerX;
-    private final int centerY;
+    private int centerX;
+    private int centerY;
     private final Color color;
     private final Figure figure;
     private int radius;
@@ -61,5 +61,13 @@ public class Shape {
         if (!figure.equals(Figure.RECTANGLE)){
             this.radius = radius;
         }
+    }
+
+    public void setCenterX(int centerX) {
+        this.centerX = centerX;
+    }
+
+    public void setCenterY(int centerY) {
+        this.centerY = centerY;
     }
 }

@@ -1,5 +1,6 @@
 package Curve;
 
+import Forms.Polygon;
 import Lines.Line;
 import interfaces.IPixel;
 import utilities.MyPoint;
@@ -53,7 +54,11 @@ public class Curve {
         }
     }
 
-    public void drawParable(int numberOfPoints, MyPoint startPoint) {
+    public void drawParable(int numberOfPoints, MyPoint startPoint, int scaleX, int scaleY) {
+        drawPolyLine(getPointsOfCurve(numberOfPoints,startPoint,scaleX,scaleY));
+    }
+
+    public MyPoint[] getPointsOfCurve(int numberOfPoints, MyPoint startPoint, int scaleX, int scaleY){
         MyPoint[]points = new MyPoint[numberOfPoints];
         for (int i = 0; i < points.length; i++) {
             points[i] = new MyPoint(0, 0);
@@ -61,11 +66,10 @@ public class Curve {
 
         for (int i = 0; i < numberOfPoints; i++) {
             double angle = (Math.PI / (numberOfPoints - 1)) * i;
-            points[i].setX((int)((angle * 80)+ startPoint.getX()));
-            points[i].setY((int)(-Math.sin(angle) * 400)+startPoint.getY());
+            points[i].setX((int)((angle * scaleX)+ startPoint.getX()));
+            points[i].setY((int)(-Math.sin(angle) * scaleY)+startPoint.getY());
         }
-
-        drawPolyLine(points);
+        return points;
     }
 
     private void drawPolyLine(MyPoint[]points) {

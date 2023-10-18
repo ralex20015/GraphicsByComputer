@@ -3,6 +3,10 @@ package utilities;
 public class MyPoint{
     private int x;
     private int y;
+    public MyPoint(){
+        x = 0;
+        y = 0;
+    }
     public MyPoint(int x, int y){
         this.x = x;
         this.y = y;
@@ -22,5 +26,9 @@ public class MyPoint{
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public String toString(){
+        return "x = "+x+", y = "+y;
     }
 }

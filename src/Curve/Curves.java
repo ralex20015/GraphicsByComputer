@@ -27,7 +27,7 @@ public class Curves extends JPanel {
         super.paintComponent(g);
         g.drawImage(buffer,0,0,null);
         Curve curve =  new Curve(buffer);
-        curve.drawParable(8, new MyPoint(30,450));
-        curve.drawParable(100, new MyPoint(300,450));
+        curve.drawParable(8, new MyPoint(30,450),80,400);
+        curve.drawParable(100, new MyPoint(300,450),80,400);
     }
 }
