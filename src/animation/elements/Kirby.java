@@ -27,7 +27,7 @@ public class Kirby extends BufferedImage implements Movable {
     public Kirby(int width, int height, int imageType) {
         super(width, height, imageType);
         polygon = new Polygon(this);
-        position = new MyPoint(100,275);
+        position = new MyPoint(100,280);
         polygon.addVert(new MyPoint(position.getX(),position.getY()));
         polygon.addVert(new MyPoint(position.getX()+width,position.getY()));
         polygon.addVert(new MyPoint(position.getX()+width,position.getY()+height));
@@ -87,7 +87,7 @@ public class Kirby extends BufferedImage implements Movable {
                         Arrays.stream(pointsHand))
                 .toArray(MyPoint[]::new);
         kirby.setVerts(kirbyPoints);
-        Flood.apply(kirby.drawPolygon(),new int[]{0, kirbyShoes.getRGB(),Color.BLACK.getRGB()});
+        Flood.apply(kirby.drawPolygon(),new int[]{0, kirbyShoes.getRGB(),Color.BLACK.getRGB(), Color.PINK.getRGB()});
         kirby.changeColor(Color.BLACK);
         kirby.drawPolygon();
 
@@ -103,7 +103,7 @@ public class Kirby extends BufferedImage implements Movable {
         //Eyes
         OutlineShape outlineShape = new OutlineShape();
         outlineShape.changeColor(Color.BLACK);
-        Flood.apply(outlineShape.drawEllipse(100,60,5,13,this,graphics));
+        Flood.apply(outlineShape.drawEllipse(100,60,5,13,this,graphics),new int[]{0, kirbyColor.getRGB(),Color.PINK.getRGB()});
         outlineShape.changeColor(Color.WHITE);
         Flood.apply(outlineShape.drawBasicCircle(100,57,2,this,graphics));
 

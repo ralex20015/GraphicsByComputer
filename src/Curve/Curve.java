@@ -94,14 +94,14 @@ public class Curve {
         }
     }
 
-    public void drawParticleMovement(int tMax){
+    public void drawParticleMovement(MyPoint startPoint,int scaleFactor,int tMax){
         //x = t - 3 sent
         //y = 4 - 3cost
         int counter = 0;
         MyPoint[]lines = new MyPoint[tMax];
         for (double t = 0.0; t < tMax/10.0; t += 0.1) {
-            int x = (int)((t - (3 * Math.sin(t))) * 15) + 50;
-            int y = (int)((4 - (3 * -Math.cos(t))) * 15) + 50;
+            int x = (int)((t - (3 * Math.sin(t))) * scaleFactor) + startPoint.getX();
+            int y = (int)((4 - (3 * -Math.cos(t))) * scaleFactor) + startPoint.getY();
 
             if (counter < tMax){
                 MyPoint point = new MyPoint(x, y);
