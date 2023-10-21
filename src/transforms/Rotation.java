@@ -38,7 +38,7 @@ public class Rotation extends JPanel implements Runnable {
         polygon.addVert(new MyPoint(200,100));
         polygon.addVert(new MyPoint(200,150));
         polygon.addVert(new MyPoint(100,150));
-        Transform.rotate(polygon,angle);
+        Transform.rotateInBaseOfPivot(polygon,angle,new MyPoint(100,100));
         Flood.apply(polygon.drawPolygon());
 //        ScanLine.setBufferedImage(bufferedImage);
 //        ScanLine.apply(polygon.getVerts(),Color.RED,null);
