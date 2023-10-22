@@ -21,4 +21,9 @@ public interface Movable {
         if (current >= inferiorLimit & current < superiorLimit)
             Transform.translate(polygon,0,+7);
     }
+
+    default void fallNormal(int current, int inferiorLimit, int superiorLimit, Polygon polygon){
+        if (current >= inferiorLimit & current < superiorLimit)
+            Transform.translate(polygon,0,+5);
+    }
 }

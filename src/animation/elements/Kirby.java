@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 public class Kirby extends BufferedImage implements Movable {
 
     private final Polygon polygon;
-    private final int radius = 50;
     private MyPoint position;
     private final MyPoint centerOfKirby;
     private Graphics graphics;
@@ -29,7 +28,6 @@ public class Kirby extends BufferedImage implements Movable {
     private Polygon rightHand;
 
     private Polygon kirbyRightShoe;
-    private Polygon leftHand;
 
     public Kirby(int width, int height, int imageType) {
         super(width, height, imageType);
@@ -51,6 +49,7 @@ public class Kirby extends BufferedImage implements Movable {
     }
     public void drawKirby(){
         MyPoint[]points = polygon.getVerts();
+//        System.out.println(points[0].getX()+", "+points[0].getY());
         graphics.drawImage(this, points[0].getX(), points[0].getY(),null);
     }
     private void kirbyRight(){
@@ -232,11 +231,6 @@ public class Kirby extends BufferedImage implements Movable {
     public enum KirbyPosition{
         RIGHT, LEFT
     }
-
-    public MyPoint getPosition() {
-        return position;
-    }
-
     public void setPosition(MyPoint position) {
         this.position = position;
         polygon.setVerts(new MyPoint[]{new MyPoint(position.getX(),position.getY()),
@@ -244,8 +238,5 @@ public class Kirby extends BufferedImage implements Movable {
                 new MyPoint(position.getX()+getWidth(),position.getY()+getHeight()),
                 new MyPoint(position.getX(),position.getY()+getHeight())
         });
-    }
-    public KirbyPosition getKirbyDirection(){
-        return kirbyPosition;
     }
 }

@@ -27,6 +27,14 @@ public class Polygon {
         line = new Line(c);
     }
 
+    public Polygon(BufferedImage bufferedImage, MyPoint[]verts){
+        c = Color.RED;
+        this.bufferedImage = bufferedImage;
+        vertices = new ArrayList<>();
+        line = new Line(c);
+        setVerts(verts);
+    }
+
     public void changeColor(Color color){
         if (color != null){
             c = color;

@@ -31,6 +31,7 @@ public class Animation extends JPanel implements Runnable {
     private final Color landScapeColor = new Color(116, 186, 176);
     private final Color grassColor = new Color(0,255,0,100);
     private Flower[] flowers;
+    private int updaterWhenKirbyJumpsOnPlatforms =0;
     public Animation(int width, int height){
         bufferedImage = new BufferedImage(5000, 1200, BufferedImage.TYPE_INT_ARGB);
         anim = new Thread(this);
@@ -41,17 +42,17 @@ public class Animation extends JPanel implements Runnable {
         kirby.setKirbyPosition(Kirby.KirbyPosition.RIGHT);
         sun = new Sun(100,100,BufferedImage.TYPE_INT_ARGB);
         canvasOfAnimation = new Polygon(bufferedImage);
-        canvasOfAnimation.addVert(new MyPoint(0,0));
-        canvasOfAnimation.addVert(new MyPoint(width,0));
-        canvasOfAnimation.addVert(new MyPoint(width,height));
-        canvasOfAnimation.addVert(new MyPoint(0,height));
+        canvasOfAnimation.addVert(new MyPoint(0,600));
+        canvasOfAnimation.addVert(new MyPoint(width,600));
+        canvasOfAnimation.addVert(new MyPoint(width,600+height));
+        canvasOfAnimation.addVert(new MyPoint(0,600+height));
 
         //Blue
         landScape = new Polygon(bufferedImage);
         landScape.addVert(new MyPoint(0,0));
         landScape.addVert(new MyPoint(width,0));
-        landScape.addVert(new MyPoint(width,398));
-        landScape.addVert(new MyPoint(0,398));
+        landScape.addVert(new MyPoint(width,400));
+        landScape.addVert(new MyPoint(0,400));
 
         addFlowers();
 
@@ -111,18 +112,34 @@ public class Animation extends JPanel implements Runnable {
             MyPoint[] pointsOfEmptySpace = emptyPlace.getVerts();
             drawFillRect(pointsOfEmptySpace, landScapeColor, null);
         }
-        if (currentIncrement > 1000 && currentIncrement < 3000){
+
+        if (currentIncrement > 1000 && currentIncrement < 3500){
             MyPoint[] grassPoints = {new MyPoint(1400,400), new MyPoint(2250, 400),
                 new MyPoint(2250,600), new MyPoint(1400,600)};
-            drawFillRect(grassPoints, grassColor,null);
             MyPoint[] roof = {new MyPoint(1400,0), new MyPoint(1800, 0),
                     new MyPoint(1800,200), new MyPoint(1400,200)};
+            if (currentIncrement >=2580){
+                roof = new MyPoint[]{new MyPoint(1400,0), new MyPoint(1800, 0),
+                        new MyPoint(1800,200 + updaterWhenKirbyJumpsOnPlatforms), new MyPoint(1400,200+ updaterWhenKirbyJumpsOnPlatforms)};
+                grassPoints = Transform.translate(new Polygon(bufferedImage,grassPoints),0,
+                        updaterWhenKirbyJumpsOnPlatforms);
+            }
+            drawFillRect(grassPoints, grassColor,null);
             drawFillRect(roof, Color.gray, landScapeColor);
         }
         //part when kirby jumps to one side to another
         if (currentIncrement > 1300){
             MyPoint[] firstPlatform = {new MyPoint(2100,250), new MyPoint(2300, 250),
                     new MyPoint(2300,300), new MyPoint(2100,300)};
+            MyPoint[] secondPlatform = {new MyPoint(1800,150), new MyPoint(1950, 150),
+                    new MyPoint(1950,200), new MyPoint(1800,200)};
+            if (currentIncrement >= 2580){
+                firstPlatform = Transform.translate(new Polygon(bufferedImage,firstPlatform),
+                        0, updaterWhenKirbyJumpsOnPlatforms);
+                secondPlatform = Transform.translate(new Polygon(bufferedImage,secondPlatform),
+                        0, updaterWhenKirbyJumpsOnPlatforms);
+            }
+            drawFillRect(secondPlatform, Color.gray, landScapeColor);
             drawFillRect(firstPlatform, Color.gray, landScapeColor);
         }
         sun.setGraphics(graphics);
@@ -153,7 +170,12 @@ public class Animation extends JPanel implements Runnable {
 
     private void resetBuffer(Graphics g) {
         MyPoint[]canvas = canvasOfAnimation.getVerts();
-        g.drawImage(bufferedImage,canvas[0].getX(),canvas[0].getY(),null);
+        if (currentIncrement < 2580){
+            g.drawImage(bufferedImage,canvas[0].getX(),canvas[0].getY()-600,null);
+        }else{
+            g.drawImage(bufferedImage,canvas[0].getX(),canvas[0].getY()-600+ updaterWhenKirbyJumpsOnPlatforms,null);
+
+        }
         bufferedImage = new BufferedImage(5000,1200,BufferedImage.TYPE_INT_ARGB);
         graphics = bufferedImage.createGraphics();
     }
@@ -204,17 +226,28 @@ public class Animation extends JPanel implements Runnable {
             }
 
             if (currentIncrement == 2210){
-                System.out.println("Si entro");
                 kirby = new Kirby(200,150,BufferedImage.TYPE_INT_ARGB);
                 kirby.setPosition(new MyPoint(2079,138));
                 kirby.setGraphics(graphics);
                 kirby.setKirbyPosition(Kirby.KirbyPosition.LEFT);
             }
 
-            if (currentIncrement > 2215){
-                kirby.moveLeft(currentIncrement,2210,2280);
-            }
+            kirby.moveLeft(currentIncrement,2210,2280);
+            kirby.jumpLeft(currentIncrement, 2280, 2450, kirby.getPolygon());
 
+            if (currentIncrement >= 2450 && currentIncrement < 2520){
+                Transform.translate(kirby.getPolygon(),-5,+5);
+            }
+            //Change the drawOfKirby to Right
+            if (currentIncrement == 2520){
+                kirby = new Kirby(200,150,BufferedImage.TYPE_INT_ARGB);
+                kirby.setPosition(new MyPoint(1769,38));
+                kirby.setGraphics(graphics);
+                kirby.setKirbyPosition(Kirby.KirbyPosition.RIGHT);
+            }
+            kirby.moveRight(currentIncrement, 2520, 2580);
+            updateCanvasTop(currentIncrement,2580, 2650);
+            kirby.jumpRight(currentIncrement, 2650, 2750, kirby.getPolygon());
 
             secondsMillis += 100;
             if (secondsMillis % 1000 == 0){
@@ -236,36 +269,23 @@ public class Animation extends JPanel implements Runnable {
         });
         audioThread.start();
     }
-
-//    public void drawCloud(MyPoint p, int scale, Color c) {
-//        double t, x, y;
-//        double dt = 0.01;
-//        double maxT = 50.0;
-//
-//        IPixel pixel = new IPixel() {
-//            @Override
-//            public void putPixel(int x, int y, BufferedImage bufferedImage, Color c) {
-//                IPixel.super.putPixel(x, y, bufferedImage, c);
-//            }
-//        };
-//        // Calculate and draw curve
-//        for (t = 0.0; t <= maxT; t += dt) {
-//            x = t - 3.0 * Math.sin(t);
-//            y = 4.0 - 3.0 * Math.cos(t);
-//            int pixelX = (int) Math.round(x * scale);
-//            int pixelY = (int) Math.round(y * scale);
-//
-//            pixel.putPixel(p.getX() + pixelX, p.getY() + pixelY, bufferedImage,c);
-//        }
-//    }
-
     public void startAnimation(){
         anim.start();
     }
     private void updateCanvasRight(int current, int inferiorLimit, int superiorLimit) {
         if (current >= inferiorLimit & current < superiorLimit) {
             Transform.translate(canvasOfAnimation, -5, 0);
+//            System.out.println(canvasOfAnimation.getVerts()[0].getX()+", "+canvasOfAnimation.getVerts()[0].getY());
             Transform.translate(landScape,5,0);
+        }
+    }
+
+    public void updateCanvasTop(int current, int inferiorLimit, int superiorLimit) {
+        if (current >= inferiorLimit & current < superiorLimit) {
+            Transform.translate(canvasOfAnimation, 0, -5);
+            updaterWhenKirbyJumpsOnPlatforms +=5;
+            Transform.scaleWithMatrix(landScape,1,1.025);
+            kirby.fallNormal(current,inferiorLimit,superiorLimit, kirby.getPolygon());
         }
     }
 }
