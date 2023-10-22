@@ -9,15 +9,17 @@ import animation.elements.Sun;
 import transforms.Transform;
 import utilities.MyPoint;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Animation extends JPanel implements Runnable {
     private BufferedImage bufferedImage;
     private int increment = 5;
     private int currentIncrement = 0;
-    private final Kirby kirby;
+    private Kirby kirby;
     private final Thread anim;
     private Graphics graphics;
     private final Sun sun;
@@ -36,6 +38,7 @@ public class Animation extends JPanel implements Runnable {
 
         kirby = new Kirby(200,150,BufferedImage.TYPE_INT_ARGB);
         kirby.setGraphics(graphics);
+        kirby.setKirbyPosition(Kirby.KirbyPosition.RIGHT);
         sun = new Sun(100,100,BufferedImage.TYPE_INT_ARGB);
         canvasOfAnimation = new Polygon(bufferedImage);
         canvasOfAnimation.addVert(new MyPoint(0,0));
@@ -58,6 +61,7 @@ public class Animation extends JPanel implements Runnable {
         emptyPlace.addVert(new MyPoint(1400,300));
         emptyPlace.addVert(new MyPoint(1400,600));
         emptyPlace.addVert(new MyPoint(1200,600));
+//        startAudio();
     }
 
     private void addFlowers() {
@@ -91,11 +95,13 @@ public class Animation extends JPanel implements Runnable {
         floor.setVerts(floorPoints);
         ScanLine.apply(floor.getVerts(),floor.drawPolygon());
 
-        Polygon plateau = new Polygon(bufferedImage);
-        plateau.changeColor(new Color(0,255,0,100));
-        plateau.setVerts(new MyPoint[]{new MyPoint(610,300),
-                new MyPoint(750,300), new MyPoint(750,400), new MyPoint(610,400)});
-        Flood.apply(plateau.drawPolygon());
+        if (currentIncrement < 2000){
+            Polygon plateau = new Polygon(bufferedImage);
+            plateau.changeColor(new Color(0,255,0,100));
+            plateau.setVerts(new MyPoint[]{new MyPoint(610,300),
+                    new MyPoint(750,300), new MyPoint(750,400), new MyPoint(610,400)});
+            Flood.apply(plateau.drawPolygon());
+        }
 
         MyPoint[] pointsOfLandScape = landScape.getVerts();
         drawFillRect(pointsOfLandScape, landScapeColor, null);
@@ -105,7 +111,7 @@ public class Animation extends JPanel implements Runnable {
             MyPoint[] pointsOfEmptySpace = emptyPlace.getVerts();
             drawFillRect(pointsOfEmptySpace, landScapeColor, null);
         }
-        if (currentIncrement > 1000 && currentIncrement < 2500){
+        if (currentIncrement > 1000 && currentIncrement < 3000){
             MyPoint[] grassPoints = {new MyPoint(1400,400), new MyPoint(2250, 400),
                 new MyPoint(2250,600), new MyPoint(1400,600)};
             drawFillRect(grassPoints, grassColor,null);
@@ -122,6 +128,7 @@ public class Animation extends JPanel implements Runnable {
         sun.setGraphics(graphics);
         kirby.setGraphics(graphics);
         kirby.drawKirby();
+
     }
 
     private void showFlowers(){
@@ -190,9 +197,23 @@ public class Animation extends JPanel implements Runnable {
             }
 
             updateCanvasRight(currentIncrement,1360, 1950);
-            kirby.moveRight(currentIncrement,1360,1900);
+            kirby.moveRight(currentIncrement,1360,1820);
+            kirby.jumpRight(currentIncrement,1950,2150,kirby.getPolygon());
+            if (currentIncrement >= 2150 && currentIncrement < 2210){
+                Transform.translate(kirby.getPolygon(),5,+5);
+            }
 
-//            kirby.moveRight();
+            if (currentIncrement == 2210){
+                System.out.println("Si entro");
+                kirby = new Kirby(200,150,BufferedImage.TYPE_INT_ARGB);
+                kirby.setPosition(new MyPoint(2079,138));
+                kirby.setGraphics(graphics);
+                kirby.setKirbyPosition(Kirby.KirbyPosition.LEFT);
+            }
+
+            if (currentIncrement > 2215){
+                kirby.moveLeft(currentIncrement,2210,2280);
+            }
 
 
             secondsMillis += 100;
@@ -201,6 +222,19 @@ public class Animation extends JPanel implements Runnable {
             }
             repaint();
         }
+    }
+
+    private void startAudio() {
+        Thread audioThread = new Thread(()->{
+            try {
+                Clip clip = AudioSystem.getClip();
+                clip.open(AudioSystem.getAudioInputStream(Animation.class.getResource("/animation/atmosphereMusic/song.wav")));
+                clip.start();
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        audioThread.start();
     }
 
 //    public void drawCloud(MyPoint p, int scale, Color c) {

@@ -5,7 +5,7 @@ import utilities.MyPoint;
 
 public class Transform {
 
-    public static void translate(Polygon polygon, int incrementX, int incrementY){
+    public static MyPoint[] translate(Polygon polygon, int incrementX, int incrementY){
         MyPoint[] vertex = polygon.getVerts();
         MyPoint[] translatedVertex = new MyPoint[vertex.length];
 
@@ -48,6 +48,7 @@ public class Transform {
             }
         }
         polygon.setVerts(translatedVertex);
+        return translatedVertex;
     }
 
     public static MyPoint[] rotate(Polygon polygon, double angle){
