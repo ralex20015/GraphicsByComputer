@@ -29,7 +29,7 @@ public class Flower extends BufferedImage {
         curve.drawFlower(new MyPoint(width/2,height/4),10, color);
         OutlineShape shape = new OutlineShape();
         shape.changeColor(Color.green);
-        ScanLine.apply(shape.drawRectangle((width/2)-2,(height/2)-10,4,56,this,graphics));
+        ScanLine.apply(shape.drawRectangle((width/2)-2,(height/2)-10,4,60,this,graphics));
     }
     public void setGraphicsWhile(Graphics graphics, int current, int limit){
         if (current < limit){

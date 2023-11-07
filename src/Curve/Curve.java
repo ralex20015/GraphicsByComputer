@@ -84,14 +84,24 @@ public class Curve {
     }
 
     public void drawInfinite(int radius, MyPoint center){
+        drawPolyLine(getPointsOfInfinite(radius,center));
+    }
+
+    public MyPoint[]getPointsOfInfinite(int radius, MyPoint center){
+        MyPoint[]points = new MyPoint[628];
+        int conta = 0;
         for (double theta = 0; theta < 2 * Math.PI; theta+= 0.01) {
             int x = (int)((radius * Math.cos(theta))) + center.getX();
             int y = (int) ((radius * Math.sin(2 * theta)/2) + center.getY());
             if (color == null){
                 color = Color.BLUE;
             }
-            pixel().putPixel(x,y,bufferedImage, color);
+            if (conta < points.length){
+                points[conta] = new MyPoint(x,y);
+            }
+            conta++;
         }
+        return points;
     }
 
     public void drawParticleMovement(MyPoint startPoint,int scaleFactor,int tMax){

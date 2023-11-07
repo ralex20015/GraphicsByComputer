@@ -135,7 +135,7 @@ public class Transform {
         polygon.setVerts(rotatedVertices);
     }
 
-    public static void scaleWithMatrix(Polygon polygon, double sx, double sy){
+    public static MyPoint[] scaleWithMatrix(Polygon polygon, double sx, double sy){
         double [][]matrixOfScale= {
                 {sx, 0, 0},
                 {0, sy, 0},
@@ -187,6 +187,7 @@ public class Transform {
             }
         }
         polygon.setVerts(vertex);
+        return vertex;
     }
 
 
