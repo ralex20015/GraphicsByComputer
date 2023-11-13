@@ -34,6 +34,14 @@ public class MyPoint{
         this.y = y;
     }
 
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
+    }
+
     public String toString(){
         return "x = "+x+", y = "+y;
     }

@@ -108,9 +108,6 @@ public class Animation extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawAll();
-//        MyPoint[] points = landScape.getVerts();
-//        graphics.setColor(Color.BLACK);
-//        graphics.drawString(String.valueOf(seconds), points[0].getX() + 300, points[0].getY() + 500);
         resetBuffer(g);
     }
 

@@ -1,16 +1,12 @@
 package Forms;
 
-import Curve.Curve;
 import Lines.Line;
-import transforms.Transform;
 import utilities.MyPoint;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Stream;
 
 
 public class Polygon {
@@ -122,41 +118,6 @@ public class Polygon {
             head[i] = new MyPoint(x, y);
             angle += angleIncrement;
         }
-
-//        Curve curve = new Curve(bufferedImage);
-//        MyPoint[] pointsHand = curve.getPointsOfCurve(100,new MyPoint(25,125),10,20);
-//        Polygon polygon = new Polygon(bufferedImage);
-//        polygon.setVerts(pointsHand);
-//        pointsHand = Transform.rotate(polygon,270);
-//        MyPoint[]kirbyPoints =  Stream.concat(
-//                Arrays.stream(head).limit(98),
-//                Arrays.stream(pointsHand))
-//                .toArray(MyPoint[]::new);
-//        System.out.println(pointsHand[pointsHand.length-1]);
-//        System.out.println(pointsHand[0]);
-
-//        double starAngle = 0;
-//
-//        MyPoint[]head2 = new MyPoint[totalPoints];
-//        for (int i = 0; i < totalPoints; i++) {
-//            x = centerX + (int) (radiusX * Math.cos(Math.toRadians(starAngle)));
-//            y = centerY + (int) (radiusY * -Math.sin(Math.toRadians(starAngle)));
-//            head2[i] = new MyPoint(x, y);
-//            startAngle += angleIncrement;
-//        }
-//
-//        kirbyPoints =  Stream.concat(
-//                        Arrays.stream(kirbyPoints),
-//                        Arrays.stream(head2))
-//                .toArray(MyPoint[]::new);
-//        for (int i = 1; i < kirbyPoints.length; i++) {
-//            line.drawDDALine(kirbyPoints[i], kirbyPoints[i - 1], bufferedImage, graphics);
-//        }
-//        System.out.println(kirbyPoints[0]+" "+kirbyPoints[kirbyPoints.length-1]);
-////        line.drawDDALine(kirbyPoints[0], kirbyPoints[totalPoints - 1], bufferedImage, graphics);
-//
-//        MyPoint center2 = getMidPoint(kirbyPoints);
-
         return head;
     }
 }
