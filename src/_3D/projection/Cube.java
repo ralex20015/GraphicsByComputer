@@ -7,6 +7,7 @@ import utilities.MyPoint;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class Cube {
     private final BufferedImage bufferedImage;
@@ -23,27 +24,71 @@ public class Cube {
 
         for (int i = 0; i < points.length; i++){
             double u =  (double) (points[i].getZ()) / vectorOfProjection[2];
-            double x = points[i].getX() + (vectorOfProjection[0] * u)+100;
+            double x = points[i].getX() + (vectorOfProjection[0] * u)+100   ;
             double y = points[i].getY() + (vectorOfProjection[1] * u);
 
             pointsOfProjection[i] = new MyPoint((int) x,(int)y);
         }
+        drawBackgroundOfCube(pointsOfProjection);
+        drawOutlineOfCube(pointsOfProjection);
+    }
 
-        if (lineColor == null){
-           lineColor = Color.BLUE;
+    public void drawWithPerspective(int[]vectorOfProjection){
+        MyPoint[] pointsOfProjection = new MyPoint[8];
+        for (int i = 0; i < points.length; i++){
+            double u =  (double) (points[i].getZ()) / vectorOfProjection[2];
+            double x = vectorOfProjection[0] + ((points[i].getX() - vectorOfProjection[0]) * u)+100;
+            double y = vectorOfProjection[1] + ((points[i].getY() - vectorOfProjection[1]) * u)-300;
+            pointsOfProjection[i] = new MyPoint((int) x,(int)y);
         }
+
+        System.out.println(Arrays.toString(pointsOfProjection));
+        drawBackgroundOfCube(pointsOfProjection);
+        drawOutlineOfCube(pointsOfProjection);
+    }
+
+    private void fillPolygon(MyPoint...points){
+        Polygon polygon = new Polygon(bufferedImage, points);
+        polygon.changeColor(backgroundColor);
+//        Flood.apply(polygon.drawPolygon());
+        ScanLine.apply(points, polygon.drawPolygon());
+    }
+
+    public void setLineColor(Color color){
+        if (color != null){
+            this.lineColor = color;
+        }
+    }
+
+    public void setBackgroundColor(Color color){
+        if (color != null){
+            this.backgroundColor = color;
+        }
+    }
+    private void drawBackgroundOfCube(MyPoint[]pointsOfProjection){
+        if (backgroundColor != null){
+            //fill front
+            fillPolygon(pointsOfProjection[6], pointsOfProjection[4], pointsOfProjection[5], pointsOfProjection[7]);
+            //fill right
+            fillPolygon(pointsOfProjection[7], pointsOfProjection[5], pointsOfProjection[1], pointsOfProjection[3]);
+            //fill back
+            fillPolygon(pointsOfProjection[2], pointsOfProjection[0], pointsOfProjection[1], pointsOfProjection[3]);
+            //fil left
+            fillPolygon(pointsOfProjection[6], pointsOfProjection[4], pointsOfProjection[0], pointsOfProjection[2]);
+            //fill top
+            fillPolygon(pointsOfProjection[4], pointsOfProjection[0], pointsOfProjection[1], pointsOfProjection[5]);
+            // fill bottom
+            fillPolygon(pointsOfProjection[6], pointsOfProjection[2], pointsOfProjection[3], pointsOfProjection[7]);
+
+
+        }
+    }
+    private void drawOutlineOfCube(MyPoint[]pointsOfProjection){
+        if (lineColor == null){
+            lineColor = Color.BLUE;
+        }
+
         Line line = new Line(lineColor);
-        //fill top
-        fillPolygon(pointsOfProjection[6], pointsOfProjection[4], pointsOfProjection[5], pointsOfProjection[7]);
-        //fill right
-        fillPolygon(pointsOfProjection[7], pointsOfProjection[5], pointsOfProjection[1], pointsOfProjection[3]);
-        //fill back
-        fillPolygon(pointsOfProjection[2], pointsOfProjection[0], pointsOfProjection[1], pointsOfProjection[3]);
-        fillPolygon(pointsOfProjection[6], pointsOfProjection[4], pointsOfProjection[0], pointsOfProjection[2]);
-
-
-
-
         //front square
         line.drawDDALine(pointsOfProjection[4], pointsOfProjection[5], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[7], pointsOfProjection[5], bufferedImage, bufferedImage.getGraphics());
@@ -60,31 +105,38 @@ public class Cube {
         line.drawDDALine(pointsOfProjection[0], pointsOfProjection[4], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[7], pointsOfProjection[3], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[2], pointsOfProjection[6], bufferedImage, bufferedImage.getGraphics());
-
-
-
-
     }
 
-    private void fillPolygon(MyPoint...points){
-        Polygon polygon = new Polygon(bufferedImage, points);
-        if (backgroundColor == null){
-            backgroundColor = Color.BLUE;
+    public MyPoint getCenter(){
+        int xCenter = 0;
+        int yCenter = 0;
+        int zCenter = 0;
+        for (int i = 0; i < points.length; i++) {
+            xCenter = xCenter + points[i].getX();
+            yCenter = yCenter + points[i].getY();
+            zCenter = zCenter + points[i].getZ();
         }
-        polygon.changeColor(backgroundColor);
-        polygon.getMidPoint(points);
-        ScanLine.apply(points, polygon.drawPolygon());
+        xCenter = xCenter/ points.length;
+        yCenter = yCenter / points.length;
+        zCenter = zCenter / points.length;
+
+        return new MyPoint(xCenter, yCenter, zCenter);
     }
 
-    public void setLineColor(Color color){
-        if (color != null){
-            this.lineColor = color;
-        }
+    public void setPoints(MyPoint[]points){
+        this.points = points;
     }
 
-    public void setBackgroundColor(Color color){
-        if (color != null){
-            this.backgroundColor = color;
-        }
+    public double[][] getMatrixOfPoints(){
+        return new double[][]{
+                {points[0].getX(), points[0].getY(), points[0].getZ()},
+                {points[1].getX(), points[1].getY(), points[1].getZ()},
+                {points[2].getX(), points[2].getY(), points[2].getZ()},
+                {points[3].getX(), points[3].getY(), points[3].getZ()},
+                {points[4].getX(), points[4].getY(), points[4].getZ()},
+                {points[5].getX(), points[5].getY(), points[5].getZ()},
+                {points[6].getX(), points[6].getY(), points[6].getZ()},
+                {points[7].getX(), points[7].getY(), points[7].getZ()},
+        };
     }
 }

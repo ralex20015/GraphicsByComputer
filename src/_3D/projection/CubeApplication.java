@@ -31,9 +31,10 @@ public class CubeApplication extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bufferedImage,0,0,null);
-        Cube cube = new Cube(bufferedImage,pointsOfCube);
+        Cube cube = new Cube(bufferedImage, pointsOfCube);
         cube.setLineColor(Color.BLACK);
         cube.setBackgroundColor(Color.BLUE);
         cube.draw(new int[]{-32, 28, 80});
+//        cube.drawWithPerspective(new int[]{100, -300, 300});
     }
 }

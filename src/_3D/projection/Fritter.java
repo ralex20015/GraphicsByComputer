@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class ParallelProjection extends JPanel {
+public class Fritter extends JPanel {
 
     private final BufferedImage bufferedImage;
 
@@ -17,11 +17,11 @@ public class ParallelProjection extends JPanel {
         frame.setTitle("Parallel Oblique Projection");
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new ParallelProjection());
+        frame.add(new Fritter());
         frame.setVisible(true);
     }
 
-    public ParallelProjection(){
+    public Fritter(){
         bufferedImage = new BufferedImage(600,600,BufferedImage.TYPE_INT_ARGB);
     }
 
