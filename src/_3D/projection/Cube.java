@@ -24,11 +24,13 @@ public class Cube {
 
         for (int i = 0; i < points.length; i++){
             double u =  (double) (points[i].getZ()) / vectorOfProjection[2];
-            double x = points[i].getX() + (vectorOfProjection[0] * u)+100   ;
+            double x = points[i].getX() + (vectorOfProjection[0] * u)+100;
             double y = points[i].getY() + (vectorOfProjection[1] * u);
 
             pointsOfProjection[i] = new MyPoint((int) x,(int)y);
         }
+//        System.out.println(Arrays.toString(pointsOfProjection));
+
         drawBackgroundOfCube(pointsOfProjection);
         drawOutlineOfCube(pointsOfProjection);
     }
@@ -38,13 +40,13 @@ public class Cube {
         for (int i = 0; i < points.length; i++){
             double u =  (double) (points[i].getZ()) / vectorOfProjection[2];
             double x = vectorOfProjection[0] + ((points[i].getX() - vectorOfProjection[0]) * u)+100;
-            double y = vectorOfProjection[1] + ((points[i].getY() - vectorOfProjection[1]) * u)-300;
+            double y = vectorOfProjection[1] + ((points[i].getY() - vectorOfProjection[1]) * u)+300;
             pointsOfProjection[i] = new MyPoint((int) x,(int)y);
         }
 
         System.out.println(Arrays.toString(pointsOfProjection));
         drawBackgroundOfCube(pointsOfProjection);
-        drawOutlineOfCube(pointsOfProjection);
+//        drawOutlineOfCube(pointsOfProjection);
     }
 
     private void fillPolygon(MyPoint...points){
@@ -79,8 +81,6 @@ public class Cube {
             fillPolygon(pointsOfProjection[4], pointsOfProjection[0], pointsOfProjection[1], pointsOfProjection[5]);
             // fill bottom
             fillPolygon(pointsOfProjection[6], pointsOfProjection[2], pointsOfProjection[3], pointsOfProjection[7]);
-
-
         }
     }
     private void drawOutlineOfCube(MyPoint[]pointsOfProjection){
@@ -89,13 +89,13 @@ public class Cube {
         }
 
         Line line = new Line(lineColor);
-        //front square
+        //back square (top-right-bottom-left is the sequence)
         line.drawDDALine(pointsOfProjection[4], pointsOfProjection[5], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[7], pointsOfProjection[5], bufferedImage, bufferedImage.getGraphics());
-        line.drawDDALine(pointsOfProjection[4], pointsOfProjection[6], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[7], pointsOfProjection[6], bufferedImage, bufferedImage.getGraphics());
+        line.drawDDALine(pointsOfProjection[4], pointsOfProjection[6], bufferedImage, bufferedImage.getGraphics());
 
-        //back square
+        //front square
         line.drawDDALine(pointsOfProjection[0], pointsOfProjection[1], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[1], pointsOfProjection[3], bufferedImage, bufferedImage.getGraphics());
         line.drawDDALine(pointsOfProjection[2], pointsOfProjection[3], bufferedImage, bufferedImage.getGraphics());
@@ -138,5 +138,19 @@ public class Cube {
                 {points[6].getX(), points[6].getY(), points[6].getZ()},
                 {points[7].getX(), points[7].getY(), points[7].getZ()},
         };
+    }
+
+    public Color applyAmbientLight(Color color, int ambientLightIntensity) {
+        int red = (color.getRed() + ambientLightIntensity);
+        int green = (color.getGreen() + ambientLightIntensity);
+        int blue = (color.getBlue() + ambientLightIntensity);
+//        System.out.println("before: "+"red = "+red+", blue = "+blue+", green = "+green);
+
+        // Asegurarse de que los valores estén dentro del rango (0-255)
+        red = Math.min(Math.max(red, 0), 255);
+        green = Math.min(Math.max(green, 0), 255);
+        blue = Math.min(Math.max(blue, 0), 255);
+//        System.out.println("after: "+"red = "+red+", blue = "+blue+", green = "+green);
+        return new Color(red, green, blue);
     }
 }
